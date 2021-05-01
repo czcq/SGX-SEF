@@ -2582,18 +2582,30 @@ let reduce_import (ec: enclave_content) =
   List.fold_left (combine) (List.hd imported_ec_list) (List.tl imported_ec_list)
 
 (* It generate policy source file. *)
-let gen_policy_source (fname: string) =
-    if not (Sys.file_exists(fname)) then
-        let default_policy_code = "#include \"check_point.hpp\"\n\
-                                   bool CheckPoint::policy_check_user(cp_info_t info, std::deque <cp_info_t> log) {\n\
-                                   \t(void) info;\n\
-                                   \t(void) log;\n\
-                                   \treturn true;\n\
-                                   }"
-        in
-        let out_chan = open_out fname in
-            output_string out_chan default_policy_code;
-            close_out out_chan
+(*let gen_policy_source (fname: string) =*)
+(*    let policy_source = Buffer.create 256 in*)
+(*    let get_policy_source (fname: string) =*)
+(*        if not (Sys.file_exists(fname)) then*)
+(*            Buffer.add_string policy_source ("#include \"check_point.hpp\"\n\*)
+(*                                             bool __attribute__((weak)) policy_check_user(cp_info_t info, std::deque <cp_info_t> log) {\n\*)
+(*                                             \t(void) info;\n\*)
+(*                                             \t(void) log;\n\*)
+(*                                             \treturn true;\n\*)
+(*                                             }")*)
+(*        else*)
+(*            let ic = open_in fname in*)
+(*                try*)
+(*                    while true do*)
+(*                        let line = input_line ic in*)
+(*                        Buffer.add_string policy_source (line ^ "\n");*)
+(*                    done*)
+(*                with*)
+(*                    e -> close_in_noerr ic*)
+(*    in*)
+(*    let oc = open_out ("_" ^ fname) in*)
+(*    get_policy_source(fname);*)
+(*    output_string oc (Buffer.contents policy_source);*)
+(*    close_out oc*)
 
 (* Generate the Enclave code. *)
 let gen_enclave_code (e: Ast.enclave) (ep: edger8r_params) =
@@ -2611,5 +2623,5 @@ let gen_enclave_code (e: Ast.enclave) (ep: edger8r_params) =
       Plugin.gen_edge_routines ec ep
     else (
       (if ep.gen_untrusted then (gen_untrusted_header ec; if not ep.header_only then gen_untrusted_source ec));
-      (if ep.gen_trusted then (gen_trusted_header ec; gen_policy_source("policy_sgx_sef.cpp"); if not ep.header_only then gen_trusted_source ec))
+      (if ep.gen_trusted then (gen_trusted_header ec; if not ep.header_only then gen_trusted_source ec))
     )

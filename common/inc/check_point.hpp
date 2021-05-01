@@ -24,6 +24,8 @@ typedef struct cp_info {
 } cp_info_t;
 #endif //CP_INFO_T
 
+bool policy_check_user(cp_info_t info, std::deque <cp_info_t> log);
+
 #ifndef CLASS_CHECK_POINT
 #define CLASS_CHECK_POINT
 
@@ -43,12 +45,9 @@ public:
      */
     bool get_func_info(void *addr, cp_info_t *info);
 
-private:
     int _trigger(cp_info_t info);
 
     bool policy_check(cp_info_t info);
-
-    bool policy_check_user(cp_info_t info, std::deque <cp_info_t> log);
 
     void log(cp_info_t info);
 

@@ -57,6 +57,12 @@ int CheckPoint::_trigger(cp_info_t info) {
 #endif
 }
 
+bool __attribute__((weak)) policy_check_user(cp_info_t info, std::deque <cp_info_t> log) {
+    UNUSED(info);
+    UNUSED(log);
+    return true;
+}
+
 bool CheckPoint::policy_check(cp_info_t info) {
 #ifdef FILE_MODE
     UNUSED(info);

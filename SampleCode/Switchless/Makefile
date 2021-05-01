@@ -125,7 +125,7 @@ else
 endif
 Crypto_Library_Name := sgx_tcrypto
 
-Enclave_Cpp_Files := Enclave/Enclave.cpp Enclave/policy_sgx_sef.cpp
+Enclave_Cpp_Files := Enclave/Enclave.cpp
 Enclave_Include_Paths := -IEnclave -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx
 
 Enclave_C_Flags := -nostdinc -fvisibility=hidden -fpie -fstack-protector $(Enclave_Include_Paths)
@@ -144,10 +144,10 @@ Enclave_Security_Link_Flags := -Wl,-z,relro,-z,now,-z,noexecstack
 # Otherwise, you may get some undesirable errors.
 #
 # Notes on linking sgx_switchless:
-# libsgx_tswitchless.a contains some strong symbols that must override the 
+# libsgx_tswitchless.a contains some strong symbols that must override the
 # corresponding weak symbols defined in sgx_tlibc.a and sgx_trts.a. For this reason,
-# -lsgx_tswitchless option must be put between -Wl,--whole-archive and 
-#  -Wl,--no-whole-archive with -l$(TRTS_LIBRARY) and before the linker options 
+# -lsgx_tswitchless option must be put between -Wl,--whole-archive and
+#  -Wl,--no-whole-archive with -l$(TRTS_LIBRARY) and before the linker options
 #  for other libraries (e.g., -lsgx_tstdc).
 Enclave_Link_Flags := $(Enclave_Security_Link_Flags) \
     -Wl,--no-undefined -nostdlib -nodefaultlibs -nostartfiles -L$(SGX_LIBRARY_PATH) \
@@ -221,8 +221,6 @@ Enclave/Enclave_t.h: $(SGX_EDGER8R) Enclave/Enclave.edl
 	@echo "GEN  =>  $@"
 
 Enclave/Enclave_t.c: Enclave/Enclave_t.h
-
-Enclave/policy_sgx_sef.cpp: Enclave/Enclave_t.h
 
 Enclave/Enclave_t.o: Enclave/Enclave_t.c
 	@$(CC) $(Enclave_C_Flags) -c $< -o $@

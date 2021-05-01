@@ -2,7 +2,8 @@
 // Created by leone on 2021/4/28.
 //
 #include "check_point.hpp"
-#include "Enclave_t.h"
+#include "Enclave_t.h" // for ecall symbols
+#include <printf_dbg.h>
 
 static void *call_seq[] = {
         (void *) ecall_array_in,
@@ -34,18 +35,18 @@ void init_once() {
 
 // Exposed API for policy check logic, must be set for sgx-sef, can default return true.
 // Has applied log_rwlock_rdlock in wrapper
-bool CheckPoint::policy_check_user(cp_info_t info, std::deque <cp_info_t> log) {
+bool policy_check_user(cp_info_t info, std::deque <cp_info_t> log) {
     pthread_once(&once,init_once);
 
     for (auto it = cp_call_seq.rbegin(); it != cp_call_seq.rend(); it++) {
-        if (cp_info_filter(*it) and _is_info_equal(info, *it)) {
+        if (cp_info_filter(*it) and g_check_point->_is_info_equal(info, *it)) {
             it++;
             for (auto log_it = log.rbegin();
                  log_it != log.rend() and it != cp_call_seq.rend(); log_it++, it++) {
                 while (not cp_info_filter(*log_it)) {
                     log_it++;
                 }
-                if (not _is_info_equal(*log_it, *it)) {
+                if (not g_check_point->_is_info_equal(*log_it, *it)) {
                     return false;
                 }
             }

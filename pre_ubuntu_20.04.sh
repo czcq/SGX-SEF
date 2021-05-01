@@ -1,6 +1,6 @@
-sudo apt-get install build-essential ocaml ocamlbuild automake autoconf libtool wget python-is-python3 libssl-dev git cmake perl -y
+sudo apt-get install build-essential ocaml ocamlbuild automake autoconf libtool wget python3 libssl-dev git cmake perl -y
 sudo apt-get install libssl-dev libcurl4-openssl-dev protobuf-compiler libprotobuf-dev debhelper cmake reprepro unzip -y
-sudo apt-get install build-essential python -y
+sudo apt-get install build-essential python2 -y
 sudo apt-get install libssl-dev libcurl4-openssl-dev libprotobuf-dev -y
 
 make preparation
