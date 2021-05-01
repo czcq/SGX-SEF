@@ -209,7 +209,7 @@ int SGX_CDECL main(int argc, char *argv[])
     gettimeofday(&tval_after, NULL);
     timersub(&tval_after, &tval_before, &tval_result);
 
-//    ecall_show_log(global_eid);
+    ecall_show_log(global_eid);
 
     /* Destroy the enclave */
     sgx_destroy_enclave(global_eid);

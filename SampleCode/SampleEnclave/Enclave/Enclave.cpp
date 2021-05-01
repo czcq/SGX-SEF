@@ -55,5 +55,5 @@ bool filter(cp_info_t info) {
 }
 
 void ecall_show_log() {
-    g_check_point->show_log("CP_INFO", filter);
+    g_check_point->show_log("SampleEnclave");
 }
